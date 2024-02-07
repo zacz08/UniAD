@@ -1,3 +1,5 @@
+import sys
+sys.path.append("/home/zc/UniAD")
 import cv2
 import torch
 import argparse
@@ -13,7 +15,7 @@ from nuscenes.utils.geometry_utils import view_points, box_in_image, BoxVisibili
 from nuscenes.utils.data_classes import LidarPointCloud, Box
 from nuscenes.utils import splits
 from pyquaternion import Quaternion
-from projects.mmdet3d_plugin.datasets.nuscenes_e2e_dataset import obtain_map_info
+# from projects.mmdet3d_plugin.datasets.nuscenes_e2e_dataset import obtain_map_info
 from projects.mmdet3d_plugin.datasets.eval_utils.map_api import NuScenesMap
 from PIL import Image
 from tools.analysis_tools.visualize.utils import color_mapping, AgentPredictionData
@@ -28,7 +30,7 @@ class Visualizer:
 
     def __init__(
             self,
-            dataroot='/mnt/petrelfs/yangjiazhi/e2e_proj/data/nus_mini',
+            dataroot='/home/zc/UniAD/data/nuscenes',
             version='v1.0-mini',
             predroot=None,
             with_occ_map=False,
@@ -284,20 +286,21 @@ class Visualizer:
 def main(args):
     render_cfg = dict(
         with_occ_map=False,
-        with_map=False,
+        with_map=True,
         with_planning=True,
         with_pred_box=True,
         with_pred_traj=True,
         show_gt_boxes=False,
         show_lidar=False,
         show_command=True,
-        show_hd_map=False,
+        show_hd_map=False,      # work
         show_sdc_car=True,
         show_legend=True,
         show_sdc_traj=False
     )
 
     viser = Visualizer(version='v1.0-mini', predroot=args.predroot, dataroot='data/nuscenes', **render_cfg)
+    # viser = Visualizer(version='v1.0-trainval', predroot=args.predroot, dataroot='data/nuscenes', **render_cfg)
 
     if not os.path.exists(args.out_folder):
         os.makedirs(args.out_folder)
@@ -325,14 +328,14 @@ def main(args):
             viser.visualize_cam(sample_token, os.path.join(args.out_folder, str(i).zfill(3)))
             viser.combine(os.path.join(args.out_folder, str(i).zfill(3)))
 
-    viser.to_video(args.out_folder, args.demo_video, fps=4, downsample=2)
+    viser.to_video(args.out_folder, args.demo_video, fps=10, downsample=2)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--predroot', default='/mnt/nas20/yihan01.hu/tmp/results.pkl', help='Path to results.pkl')
-    parser.add_argument('--out_folder', default='/mnt/nas20/yihan01.hu/tmp/viz/demo_test/', help='Output folder path')
-    parser.add_argument('--demo_video', default='mini_val_final.avi', help='Demo video name')
+    parser.add_argument('--predroot', default='/home/zc/UniAD/output/results.pkl', help='Path to results.pkl')
+    parser.add_argument('--out_folder', default='/home/zc/UniAD/output/v1.0-test', help='Output folder path')
+    parser.add_argument('--demo_video', default='test_val_final.avi', help='Demo video name')
     parser.add_argument('--project_to_cam', default=True, help='Project to cam (default: True)')
     args = parser.parse_args()
     main(args)

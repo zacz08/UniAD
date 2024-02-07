@@ -6,7 +6,7 @@ from pyquaternion import Quaternion
 from nuscenes.prediction import PredictHelper, convert_local_coords_to_global
 from tools.analysis_tools.visualize.render.base_render import BaseRender
 from tools.analysis_tools.visualize.utils import color_mapping, AgentPredictionData
-
+from projects.mmdet3d_plugin.datasets.data_utils.data_utils import obtain_map_info
 
 class BEVRender(BaseRender):
     """

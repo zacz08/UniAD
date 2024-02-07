@@ -7,7 +7,8 @@
 from typing import Optional
 
 import torch
-from pytorch_lightning.metrics.metric import Metric
+# from pytorch_lightning.metrics.metric import Metric
+from torchmetrics import Metric
 from pytorch_lightning.metrics.functional.classification import stat_scores_multiple_classes
 from pytorch_lightning.metrics.functional.reduction import reduce
 
@@ -19,9 +20,10 @@ class IntersectionOverUnion(Metric):
         ignore_index: Optional[int] = None,
         absent_score: float = 0.0,
         reduction: str = 'none',
-        compute_on_step: bool = False,
+        # compute_on_step: bool = False,
     ):
-        super().__init__(compute_on_step=compute_on_step)
+        # super().__init__(compute_on_step=compute_on_step)
+        super().__init__()
 
         self.n_classes = n_classes
         self.ignore_index = ignore_index
@@ -76,9 +78,10 @@ class PanopticMetric(Metric):
         n_classes: int,
         temporally_consistent: bool = True,
         vehicles_id: int = 1,
-        compute_on_step: bool = False,
+        # compute_on_step: bool = False,
     ):
-        super().__init__(compute_on_step=compute_on_step)
+        # super().__init__(compute_on_step=compute_on_step)
+        super().__init__()
 
         self.n_classes = n_classes
         self.temporally_consistent = temporally_consistent
